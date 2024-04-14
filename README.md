@@ -1,8 +1,8 @@
 # Monocular-Visual-Odometry
 Monocular visual odometry is a technique used to estimate the motion of a camera in a 3D environment using only a single camera. It relies on feature tracking and matching between consecutive frames to compute the camera's pose and trajectory over time.
 
-Monocular Visual Odometry Pipeline
-Image Acquisition:
+## Monocular Visual Odometry Pipeline
+### 1. Image Acquisition:
 
 Capture images from a single camera at regular intervals or from a video stream.
 Pre-processing:
