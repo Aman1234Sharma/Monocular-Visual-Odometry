@@ -7,18 +7,18 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 * Capture images from a single camera at regular intervals or from a video stream.
 * I got these image sequence directly from kitti dataset. 
 
-### Pre-processing:
+### 2. Pre-processing:
 
 * Convert images to grayscale or apply color correction.
 * Undistort images using camera calibration parameters.
 * Kitti dataset sequence is already in grayscale,undistorted and rectified, and callibration matrix is also provided.
 
-### Feature Detection and Tracking:
+### 3. Feature Detection and Tracking:
 
 * Detect keypoints in the current image. I use ORB Feature detector for this purpose.
 * Track these keypoints across consecutive frames. I used FLANN matcher for this.
   
-### Motion Estimation:
+### 4.Motion Estimation:
 
 * Compute the relative pose change between consecutive frames using the matched keypoints.
 * Estimate the essential matrix or fundamental matrix using the matched keypoints.
