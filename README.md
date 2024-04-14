@@ -5,38 +5,32 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 ### 1. Image Acquisition:
 
 * Capture images from a single camera at regular intervals or from a video stream.
-* We get these image sequence directly from kitti dataset. 
+* I got these image sequence directly from kitti dataset. 
 
 ### Pre-processing:
 
 * Convert images to grayscale or apply color correction.
-Undistort images using camera calibration parameters if available.
-Kitti dataset sequence is already in grayscale,undistorted and rectified, and callibration matrix is provided.
-Feature Detection and Tracking:
+* Undistort images using camera calibration parameters.
+* Kitti dataset sequence is already in grayscale,undistorted and rectified, and callibration matrix is also provided.
 
-Detect keypoints (e.g., corners, edges) in the current image.
-Track these keypoints across consecutive frames using feature matching techniques (e.g., optical flow).
-Motion Estimation:
+### Feature Detection and Tracking:
 
-Compute the relative pose change between consecutive frames using the matched keypoints.
-Estimate the essential matrix or fundamental matrix using the matched keypoints.
-Depth Estimation (Optional):
+* Detect keypoints in the current image. I use ORB Feature detector for this purpose.
+* Track these keypoints across consecutive frames. I used FLANN matcher for this.
+  
+### Motion Estimation:
 
-Triangulate keypoints to estimate their 3D positions.
-Compute depth information using stereo vision or monocular depth estimation techniques.
-Scale Estimation (Optional):
+* Compute the relative pose change between consecutive frames using the matched keypoints.
+* Estimate the essential matrix or fundamental matrix using the matched keypoints.
 
-Estimate the scale factor to recover the true motion scale.
-Use additional sensors (e.g., IMU, wheel encoders) or scene constraints to improve scale estimation.
-Loop Closure and Optimization (Optional):
+### Scale Estimation :
 
-Detect loop closures to correct drift and improve the map consistency.
-Perform bundle adjustment or pose graph optimization to refine the trajectory and map.
-Visualization and Mapping:
+* Estimate the scale factor to recover the true motion scale.
+* I have used ground truth poses for estimating absolute scale.
 
-Visualize the estimated camera trajectory and 3D map in real-time or post-processing.
-Store the trajectory and map data for further analysis or integration with other systems.
-Evaluation and Validation:
+### Visualization,Evaluation and Validation:
 
-Evaluate the accuracy and robustness of the visual odometry system using ground truth data or benchmark datasets.
-Validate the performance under various conditions (e.g., indoor, outdoor, different lighting).
+* Visualize the estimated camera trajectory and 3D map in real-time.
+* Store the trajectory and map data for further analysis or integration with other systems.
+* Evaluate the accuracy and robustness of the visual odometry system using ground truth data.
+* Validate the performance under various conditions (e.g., indoor, outdoor, different lighting).
