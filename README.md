@@ -4,11 +4,12 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 ## Monocular Visual Odometry Pipeline
 ### 1. Image Acquisition:
 
-Capture images from a single camera at regular intervals or from a video stream.We get these image sequence directly from kitti dataset. 
+* Capture images from a single camera at regular intervals or from a video stream.
+* We get these image sequence directly from kitti dataset. 
 
 ### Pre-processing:
 
-Convert images to grayscale or apply color correction.
+* Convert images to grayscale or apply color correction.
 Undistort images using camera calibration parameters if available.
 Kitti dataset sequence is already in grayscale,undistorted and rectified, and callibration matrix is provided.
 Feature Detection and Tracking:
