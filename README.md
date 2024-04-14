@@ -3,7 +3,6 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 
 ## Monocular Visual Odometry Pipeline
 ### 1. Image Acquisition:
-
 * Capture images from a single camera at regular intervals or from a video stream.
 * I got these image sequence directly from kitti dataset. 
 
@@ -18,17 +17,17 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 * Detect keypoints in the current image. I use ORB Feature detector for this purpose.
 * Track these keypoints across consecutive frames. I used FLANN matcher for this.
   
-### 4.Motion Estimation:
+### 4. Motion Estimation:
 
 * Compute the relative pose change between consecutive frames using the matched keypoints.
 * Estimate the essential matrix or fundamental matrix using the matched keypoints.
 
-### Scale Estimation :
+### 5. Scale Estimation :
 
 * Estimate the scale factor to recover the true motion scale.
 * I have used ground truth poses for estimating absolute scale.
 
-### Visualization,Evaluation and Validation:
+### 6. Visualization,Evaluation and Validation:
 
 * Visualize the estimated camera trajectory and 3D map in real-time.
 * Store the trajectory and map data for further analysis or integration with other systems.
