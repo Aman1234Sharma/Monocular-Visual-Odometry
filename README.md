@@ -28,5 +28,8 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 * Store the trajectory and map data for further analysis or integration with other systems.
 * Evaluate the accuracy and robustness of the visual odometry system using ground truth data.
 * Validate the performance under various conditions (e.g., indoor, outdoor, different lighting).
-
-##
+## References
+Avi Singh's Blog - [Monocular Visual Odometry using OpenCV](https://avisingh599.github.io/vision/monocular-vo/)
+## Techstacks
+* VS Code
+* 
