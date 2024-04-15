@@ -31,5 +31,6 @@ Monocular visual odometry is a technique used to estimate the motion of a camera
 ## References
 Avi Singh's Blog - [Monocular Visual Odometry using OpenCV](https://avisingh599.github.io/vision/monocular-vo/)
 ## Techstacks
-* VS Code
+* Programming Language - Python
+* Libraries used - numpy,cv2,matplotlib,tqdm,mpl_toolkit,math
 * 
