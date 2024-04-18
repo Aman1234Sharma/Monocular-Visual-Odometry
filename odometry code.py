@@ -10,7 +10,7 @@ def load_calib(calib_path):
     with open(calib_path, 'r') as f:
         lines = f.readlines()
     
-    # Extracting P0 matrix values from the first line after removing the 'P0: ' prefix
+    # Extracting P0 matrix
     P0_values = lines[0].strip().split(' ')[1:]
     
     # Converting the list of values to a NumPy array of type float32
@@ -54,7 +54,7 @@ def match_features(descriptors1,descriptors2):
 # Match descriptors
     matches = flann.knnMatch(descriptors1, descriptors2, k=2)
 
-# Apply ratio test
+# Apply lowe's ratio test
     good_matches = []
     for m, n in matches:
         if m.distance < 0.7 * n.distance:
@@ -69,7 +69,7 @@ def motion_estimation(good_matches,keypoints1,keypoints2,K):
 # Compute the fundamental matrix
     fundamental_matrix, mask = cv2.findFundamentalMat(points1, points2, cv2.FM_LMEDS)
 
-# Compute the camera matrices from the fundamental matrix
+# Compute the Essential matrice from the fundamental matrix
     E = np.matmul(np.matmul(K.T, fundamental_matrix), K)
 
 # Decompose the essential matrix to obtain the rotation and translation
@@ -106,15 +106,13 @@ def scale_estimation(frame_id,path):
 
 def visual_odometry(projection_matrix,images,ground_truth_poses):
     
-    K, R, t,_,_,_,_ = cv2.decomposeProjectionMatrix(projection_matrix)
-    t = t[:-1] /t[-1]
+    K, R_P, t_P,_,_,_,_ = cv2.decomposeProjectionMatrix(projection_matrix)
+    t_P = t_P[:-1] /t_P[-1]
     
-    R_cam = R
-    t_cam = t
-
-    R_cam_list = [np.eye(3)]  
-    t_cam_list = [np.zeros((3, 1))]
+    R_f = R_P
+    t_f = t_P
  
+    traj = np.zeros((600, 600, 3), dtype=np.uint8)
 
     for i in tqdm(range(1, len(images))):
         keypoints1, descriptors1 = detect_features(images[i-1])
@@ -123,44 +121,28 @@ def visual_odometry(projection_matrix,images,ground_truth_poses):
         good_matches = match_features(descriptors1,descriptors2)
 
         R,t = motion_estimation(good_matches,keypoints1,keypoints2,K)
+
         scale = scale_estimation(i,r'C:\Users\sharm\OneDrive\Desktop\SDC\poses\00.txt')
+        
+        t_f = t_f + 1*(R_f@t)
+        R_f = R@R_f
+    
+        x = int(t_f[0][0] + 300)
+        y = int(t_f[2][0] + 400)
 
-        #if scale > 0.1 and t[2] > t[0] and t[2] > t[1]:
-        R_cam = R@R_cam
-        t_cam = t + scale*(t.T@R_cam).T
-
-        R_cam_list.append(R_cam)
-        t_cam_list.append(t_cam)
-
-    return R_cam_list,t_cam_list
-
-def triangulate_points(points1,points2):
-    
-    points1_reshaped = points1.reshape(-1, 2)
-    points2_reshaped = points2.reshape(-1, 2)
-    
-    
-    # Perform triangulation
-    points_3d_homogeneous = cv2.triangulatePoints(P0, P, points1_reshaped.T, points2_reshaped.T)
-    
-    # Convert homogeneous coordinates to 3D coordinates
-    points_3d = points_3d_homogeneous[:3] / points_3d_homogeneous[3]
-    
-    # Reshape to get 3D coordinates
-    points_3d = points_3d.reshape(-1, 3)
-    
-    print("3D Coordinates of Tracked Features:")
-    print(points_3d)
-
-    return points_3d
+        cv2.circle(traj, (x, y), 1, (0, 0, 255), 2)
+        
+        #cv2.putText(traj,f'x :{x} y : {y}',(10,100),cv2.FONT_HERSHEY_SIMPLEX,1,(255, 255, 255))
+        cv2.imshow('Trajectory', traj)
+        cv2.imshow('Image Sequqence',images[i])
+        cv2.waitKey(1)
 
 def main():
     P0 = load_calib(r'C:\Users\sharm\OneDrive\Desktop\SDC\dataset\sequences\00\calib.txt')
-    images = load_images(r'C:/Users/sharm/OneDrive/Desktop/SDC/dataset/sequences/00/image_0/',20)
-    poses = load_poses(r'C:\Users\sharm\OneDrive\Desktop\SDC\poses\00.txt',20)
+    images = load_images(r'C:/Users/sharm/OneDrive/Desktop/SDC/dataset/sequences/00/image_0/',1000)
+    poses = load_poses(r'C:\Users\sharm\OneDrive\Desktop\SDC\poses\00.txt',1000)
 
-    R,t = visual_odometry(P0,images,poses)
-    R_cam_array = np.array(R)
-    #print(R_cam_array)
-    t_cam_array = np.array([np.array(t) for t in t])
+    visual_odometry(P0,images,poses)
+
+main()
 
