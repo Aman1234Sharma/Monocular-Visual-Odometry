@@ -1,9 +1,6 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 from tqdm  import tqdm
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import math
 
 def load_calib(calib_path):
