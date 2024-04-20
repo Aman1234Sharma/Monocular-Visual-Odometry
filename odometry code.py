@@ -60,14 +60,11 @@ def match_features(descriptors1,descriptors2):
 
 def motion_estimation(good_matches,keypoints1,keypoints2,K):
 # Extract matching keypoints
+    
     points1 = np.float32([keypoints1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
     points2 = np.float32([keypoints2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
 
-# Compute the fundamental matrix
-    fundamental_matrix, mask = cv2.findFundamentalMat(points1, points2, cv2.FM_LMEDS)
-
-# Compute the Essential matrice from the fundamental matrix
-    E = np.matmul(np.matmul(K.T, fundamental_matrix), K)
+    E, _ = cv2.findEssentialMat(points1, points2, K, method=cv2.FM_8POINT, prob=0.999, threshold=1.0)
 
 # Decompose the essential matrix to obtain the rotation and translation
     _, R, t, _ = cv2.recoverPose(E, points1, points2, K)
