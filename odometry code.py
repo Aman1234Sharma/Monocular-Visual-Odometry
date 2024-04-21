@@ -118,7 +118,7 @@ def visual_odometry(projection_matrix,images,ground_truth_poses):
 
         scale = scale_estimation(i,r'C:\Users\sharm\OneDrive\Desktop\SDC\poses\00.txt')
         
-        t_f = t_f + 1*(R_f@t)
+        t_f = t_f + scale*(R_f@t)
         R_f = R@R_f
     
         x = int(t_f[0][0] + 300)
